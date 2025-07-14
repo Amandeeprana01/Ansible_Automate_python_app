@@ -1,0 +1,29 @@
+- name: Deploy Python App with Docker
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Pull app image from Docker Hub
+      docker_image:
+        name: amandeeprana/my-python-app
+        source: pull
+
+    - name: Run the container
+      docker_container:
+        name: python_app
+        image: amandeeprana/my-python-app:latest
+        state: started
+        restart_policy: always
+        published_ports:
+          - "8000:8000"
