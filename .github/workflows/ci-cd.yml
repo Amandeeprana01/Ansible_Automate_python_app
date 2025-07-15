@@ -36,7 +36,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./Ansible_Python
+          file: ./Ansible_Python/Dockerfile
           push: true
           tags: ${{ env.IMAGE_NAME }}:latest
