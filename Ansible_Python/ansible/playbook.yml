@@ -1,52 +1,30 @@
----
 - name: Deploy Python App with Docker
   hosts: localhost
   become: true
-
   tasks:
-    - name: Ensure Docker is installed
+    - name: Install Docker
       apt:
         name: docker.io
         state: present
-      become: true
+        update_cache: yes
 
-    - name: Ensure Docker service is running
+    - name: Start Docker service
       service:
         name: docker
         state: started
         enabled: true
 
-    - name: Log in to Docker Hub
-      community.docker.docker_login:
-        username: "{{ docker_username }}"
-        password: "{{ docker_password }}"
-
-    - name: Pull the latest image
-      community.docker.docker_image:
+    - name: Pull app image from Docker Hub
+      docker_image:
         name: amandeeprana/my-python-app
         source: pull
 
-    - name: Stop running container (if any)
-      community.docker.docker_container:
-        name: my-python-app
-        state: stopped
-        force_kill: true
-      ignore_errors: true
-
-    - name: Remove old container (if any)
-      community.docker.docker_container:
-        name: my-python-app
-        state: absent
-      ignore_errors: true
-
-    - name: Run container with new image
-      community.docker.docker_container:
-        name: my-python-app
+    - name: Run the container
+      docker_container:
+        name: python_app
         image: amandeeprana/my-python-app:latest
         state: started
         restart_policy: always
-        ports:
+        published_ports:
           - "8000:8000"
-
-        push: yes
-
+        pull: yes
