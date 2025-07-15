@@ -27,3 +27,4 @@
         restart_policy: always
         published_ports:
           - "8000:8000"
+        pull: yes
