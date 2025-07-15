@@ -1,0 +1,3 @@
+docker_username: "amandeeprana:"
+docker_password: "{{ lookup('env', 'DOCKER_PASSWORD') }}"
+
